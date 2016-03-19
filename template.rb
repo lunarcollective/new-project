@@ -49,10 +49,6 @@ insert_into_file('config/environments/development.rb', """
   end
 """, after: "   # config.action_view.raise_on_missing_translations = true")
 
-run "rm README.rdoc"
-run "touch README.md"
-
-
 after_bundle do
   run 'rails g react:install'
   run 'rails g rspec:install'
