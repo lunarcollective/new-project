@@ -49,6 +49,18 @@ insert_into_file('config/environments/development.rb', """
   end
 """, after: "   # config.action_view.raise_on_missing_translations = true")
 
+
+insert_into_file("Gemfile", """
+\n\n
+source 'https://rails-assets.org' do
+  gem 'rails-assets-skeleton'
+""", after: """  gem 'rails-assets-skeleton'\nend""")
+
+insert_into_file("app/assets/stylesheets/application.css", """
+*= require skeleton
+""", before: "*= require_tree .")
+
+
 after_bundle do
   run 'rails g react:install'
   run 'rails g rspec:install'
