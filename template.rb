@@ -56,13 +56,15 @@ insert_into_file('config/environments/development.rb', """
 """, after: "   # config.action_view.raise_on_missing_translations = true")
 
 
-insert_into_file("Gemfile", """
-\n\n
+append_to_file("Gemfile", <<-GEM)
+\n
 source 'https://rails-assets.org' do
   gem 'rails-assets-skeleton'
-""", after: """  gem 'rails-assets-skeleton'\nend""")
+end
+\n
+GEM
 
-insert_into_file("app/assets/stylesheets/application.css", "*= require skeleton", before: "*= require_tree .")
+insert_into_file("app/assets/stylesheets/application.css", "*= require skeleton\n", before: "*= require_tree .")
 
 create_file('.ruby-version', RUBY)
 
@@ -88,13 +90,12 @@ html
     title
       = local_assigns.fetch(:title, [controller_name, action_name].map(&:titleize).join(" - "))
     = csrf_meta_tags
-    = action_cable_meta_tag
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
 
   body
     nav
-      - if signed_in? %>
-        p = "Signed in as: \#{current_user.email}
+      - if signed_in?
+        p = "Signed in as: \#{current_user.email}"
         = button_to 'Sign out', sign_out_path, method: :delete
       - else
         = link_to 'Sign in', sign_in_path
