@@ -92,6 +92,14 @@ html
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
 
   body
+    nav
+      - if signed_in? %>
+        p = "Signed in as: \#{current_user.email}
+        = button_to 'Sign out', sign_out_path, method: :delete
+      - else
+        = link_to 'Sign in', sign_in_path
+
+
     - flash.each do |key, value|
       .flash class = key
         = value
@@ -115,4 +123,5 @@ $(cat spec/spec_helper.rb)" > spec/spec_helper.rb}
 
   rake('db:create')
   run 'rails generate clearance:install'
+  rake('db:migrate')
 end
