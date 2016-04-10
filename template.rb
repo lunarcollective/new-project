@@ -113,5 +113,6 @@ after_bundle do
 SimpleCov.start
 $(cat spec/spec_helper.rb)" > spec/spec_helper.rb}
 
+  rake('db:create')
   run 'rails generate clearance:install'
 end
