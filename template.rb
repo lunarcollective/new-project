@@ -1,6 +1,5 @@
 # Rails Project Template
 
-
 file('Procfile', "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}")
 
 insert_into_file "Gemfile", "\nruby '2.3.0'", after: "source 'https://rubygems.org'\n"
@@ -60,9 +59,34 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-skeleton'
 """, after: """  gem 'rails-assets-skeleton'\nend""")
 
-insert_into_file("app/assets/stylesheets/application.css", """
-*= require skeleton
-""", before: "*= require_tree .")
+insert_into_file("app/assets/stylesheets/application.css", "*= require skeleton", before: "*= require_tree .")
+
+remove_file('app/views/layouts/application.html.erb')
+create_file('app/views/layouts/application.html.slim', <<-HTML)
+doctype html
+html
+  head
+    meta[charset="utf-8"]
+    meta[http-equiv="X-UA-Compatible" content="IE=edge"]
+    meta[name="description" content=""]
+    meta[name="viewport" content="width=device-width, initial-scale=1"]
+    title
+      = local_assigns.fetch(:title, [controller_name, action_name].map(&:titleize).join(" - "))
+    = csrf_meta_tags
+    = action_cable_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+
+  body
+    - flash.each do |key, value|
+      .flash class = key
+        = value
+
+    .main-content
+      .container
+        = yield
+
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+HTML
 
 
 after_bundle do
