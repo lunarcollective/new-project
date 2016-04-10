@@ -1,9 +1,9 @@
 # Rails Project Template
 
-file('Procfile', "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}")
 
-insert_into_file "Gemfile", "\nruby '2.3.0'", after: "source 'https://rubygems.org'\n"
+RUBY = '2.3.0'
 
+insert_into_file "Gemfile", "\nruby '#{RUBY}'", after: "source 'https://rubygems.org'\n"
 
 gem 'puma'
 
@@ -20,7 +20,8 @@ gem 'faker'
 gem_group :development, :test do
   gem 'dotenv-rails'
 
-  gem 'pry'
+  gem 'pry-rails'
+  gem 'rake'
   gem 'bullet'
 
   gem 'rspec-rails'
@@ -43,6 +44,8 @@ gem_group :production do
 end
 
 
+file('Procfile', "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}")
+
 insert_into_file('config/environments/development.rb', """
   config.after_initialize do
     Bullet.enable = true
@@ -60,6 +63,18 @@ source 'https://rails-assets.org' do
 """, after: """  gem 'rails-assets-skeleton'\nend""")
 
 insert_into_file("app/assets/stylesheets/application.css", "*= require skeleton", before: "*= require_tree .")
+
+create_file('.ruby-version', RUBY)
+
+create_file('.travis.yml', <<-TRAVIS)
+language: ruby
+cache: bundler
+rvm:
+  - #{RUBY}
+script:
+  - bin/rspec
+bundler_args: --without production
+TRAVIS
 
 remove_file('app/views/layouts/application.html.erb')
 create_file('app/views/layouts/application.html.slim', <<-HTML)
