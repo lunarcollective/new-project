@@ -1,7 +1,7 @@
 # Rails Project Template
 
 
-RUBY = '2.3.0'
+RUBY = '2.3.1'
 
 insert_into_file "Gemfile", "\nruby '#{RUBY}'", after: "source 'https://rubygems.org'\n"
 
@@ -28,7 +28,6 @@ gem_group :development, :test do
   gem 'capybara'
   gem 'poltergeist'
 
-  gem 'quiet_assets'
   gem 'database_cleaner'
 
   gem 'timecop'
@@ -47,6 +46,9 @@ end
 file('Procfile', "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}")
 
 insert_into_file('config/environments/development.rb', """
+  config.assets.quiet = true
+  
+  
   config.after_initialize do
     Bullet.enable = true
     Bullet.console = true
