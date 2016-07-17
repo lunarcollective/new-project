@@ -47,8 +47,8 @@ file('Procfile', "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-d
 
 insert_into_file('config/environments/development.rb', """
   config.assets.quiet = true
-  
-  
+
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.console = true
@@ -69,16 +69,6 @@ GEM
 insert_into_file("app/assets/stylesheets/application.css", "*= require skeleton\n", before: "*= require_tree .")
 
 create_file('.ruby-version', RUBY)
-
-create_file('.travis.yml', <<-TRAVIS)
-language: ruby
-cache: bundler
-rvm:
-  - #{RUBY}
-script:
-  - bin/rspec
-bundler_args: --without production
-TRAVIS
 
 remove_file('app/views/layouts/application.html.erb')
 create_file('app/views/layouts/application.html.slim', <<-HTML)
