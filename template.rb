@@ -1,7 +1,6 @@
 # Rails Project Template
 
-
-RUBY = '2.3.1'
+RUBY = '2.3.2'
 
 insert_into_file "Gemfile", "\nruby '#{RUBY}'", after: "source 'https://rubygems.org'\n"
 
@@ -23,8 +22,10 @@ gem_group :development, :test do
   gem 'pry-rails'
   gem 'rake'
   gem 'bullet'
+  gem 'rack-mini-profiler'
 
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
   gem 'capybara'
   gem 'poltergeist'
 
