@@ -1,6 +1,6 @@
 # Rails Project Template
 
-RUBY = '2.3.2'
+RUBY = '2.3.1'
 
 insert_into_file "Gemfile", "\nruby '#{RUBY}'", after: "source 'https://rubygems.org'\n"
 
